@@ -1,0 +1,63 @@
+
+#Dane wejsciowe
+#Tworzenie p
+from __future__ import print_function
+dl = 5 #dlugosc charakterystyki p
+t = 5
+p = next_prime(2^(dl-1))
+print("Wartosc p", p)
+#Tworzenie grupy i generatora
+F = GF(p)
+a = F.primitive_element()
+print("a", a)
+#Szukanie x -> tajne
+while(True):
+        x = randint(1, (2*int(p)))
+        print("wartosc xx", x)
+        if(gcd(x, int(p-1))==1): #jezeli jest wzglednie pierwsze z p-1 to przerywa petle
+            break
+b = pow(a, x, p) #wartosc b -> a^x mod p
+
+
+#KROK 1
+#Wejscie p, a
+#wyjscie r, h -> h przesyla do B
+def wybor(p, a):
+    r = randint(1, p-1)
+    print("r", r)
+    h = int(a)**int(r)
+    return h, r
+
+
+#KROK 2_B
+#wejscie -> brak
+#wyjscie -> losowy bit k, ktory przesyla do B
+def przesyl():
+    k = randint(0,1)
+    return k
+
+#KROK 3 A
+#wejscie -> r, k, x
+#wyjscei -> s, kotre przysla do B
+def oblicz_A(r, k, x, p):
+    s = r + mod((k*x), int(p-1))
+    return s
+#KROK 4_B
+#wejscie -> a, s, h, b, k
+#wyjscie -> brak, print potwierdzam/nie potwierdzam jezeli a^s == h*b^k mod p
+def potwierdz_B(a, s, h, b, k):
+    a1 = a^s
+    a2 = mod((h*(b^k)), int(p))
+    if(int(a1)==int(a2)):
+        print("potwierdzam")
+    else:
+        print("nie potwierdzam")
+
+for i in range(1, t):
+    h, r = wybor(p, a)
+    print("wartosc h i r", h, r)
+    k = przesyl()
+    print("k", k)
+    s = oblicz_A(r, k, x, p)
+    potwierdz_B(a, s, h, b, k)
+    
